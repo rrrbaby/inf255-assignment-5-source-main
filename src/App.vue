@@ -9,6 +9,7 @@
  */
 
 import { ref, computed } from "vue";
+import AnimalCard from "./components/AnimalCard.vue";
 
 // ------------------------------------
 // App Data
@@ -78,7 +79,7 @@ loadAnimals();
 				 <div v-else-if="error">{{ error }}</div>
   				 <div v-else-if="animals.length === 0">No results found.</div>
 				 <div v-else>
-					<div v-for="animal in animals" :key="animal.id">{{ animal.name }}</div>
+					<AnimalCard v-for="animal in animals" :key="animal.id" :animal="animal" />
 				</div>
 			</div>
 		</section>
