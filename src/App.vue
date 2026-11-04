@@ -26,7 +26,7 @@ const error = ref("");
 // ------------------------------------
 
 async function loadAnimals() {
-	loading.value = true;
+  loading.value = true;
   error.value = "";
 try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -76,6 +76,7 @@ loadAnimals();
 				<!-- TODO 1: The loading, error, and empty messages, and the animals, go here. -->
 				 <div v-if="loading">Loading...</div>
 				 <div v-else-if="error">{{ error }}</div>
+  				 <div v-else-if="animals.length === 0">No results found.</div>
 				 <div v-else>
 					<div v-for="animal in animals" :key="animal.id">{{ animal.name }}</div>
 				</div>
