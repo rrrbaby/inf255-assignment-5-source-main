@@ -51,6 +51,10 @@ loadAnimals();
 
 // TODO 3: Write toggleAdoption(animal).
 
+function toggleAdoption(animal) {
+  animal.adopted = !animal.adopted;
+}
+
 // ------------------------------------
 // Filter, Sort, and Count
 // ------------------------------------
@@ -79,7 +83,7 @@ loadAnimals();
 				 <div v-else-if="error">{{ error }}</div>
   				 <div v-else-if="animals.length === 0">No results found.</div>
 				 <div v-else>
-					<AnimalCard v-for="animal in animals" :key="animal.id" :animal="animal" />
+					<AnimalCard v-for="animal in animals" :key="animal.id" :animal="animal" @toggle="toggleAdoption(animal)" />
 				</div>
 			</div>
 		</section>
