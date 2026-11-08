@@ -10,7 +10,7 @@
 
 import { ref, computed } from "vue";
 import AnimalCard from "./components/AnimalCard.vue";
-
+import AnimalControls from "./components/AnimalControls.vue";
 // ------------------------------------
 // App Data
 // ------------------------------------
@@ -22,6 +22,7 @@ const animals = ref([]);
 const loading = ref(false);
 const error = ref("");
 
+	
 // ------------------------------------
 // Load the Animals
 // ------------------------------------
@@ -61,6 +62,39 @@ function toggleAdoption(animal) {
 
 // TODO 4: Create activeFilter and activeSort, the visibleAnimals and
 // availableCount computed properties, and setFilter() and setSort().
+const activeFilter = ref("all");
+const activeSort = ref("default");
+
+const visibleAnimals = computed(() => {
+	let visible = animals.value.slice();
+
+	if (activeFilter.value === "available") {
+		visible = visible.filter((a) => !a.adopted);
+	} else if (activeFilter.value === "adopted") {
+		visible = visible.filter((a) => a.adopted);
+	}
+
+	if (activeSort.value === "name") {
+		visible.sort((a, b) => a.name.localeCompare(b.name));
+	} else if (activeSort.value === "age") {
+		// A negative result puts a before b, so smaller ages come first.
+		visible.sort((a, b) => a.age - b.age);
+	}
+	return visible;
+})
+
+const availableCount = computed(() => {
+	let available = animals.value.filter((a) => !a.adopted);
+	return available.length;
+})
+
+function setFilter(filter) {
+	activeFilter.value = filter;
+}
+
+function setSort(sort) {
+	activeSort.value = sort;
+}
 </script>
 
 <template>
@@ -74,16 +108,24 @@ function toggleAdoption(animal) {
 			<h2 id="animals-heading">Animals</h2>
 
 			<!-- TODO 4: The available count goes here. -->
+			 <div> <p v-if="!loading && !error" id="animal-count">
+				{{ availableCount }} of {{ animals.length }} animals are available for adoption.
+			</p> </div>
 
 			<!-- TODO 4: The AnimalControls component goes here. -->
+			<AnimalControls
+				:active-filter="activeFilter"
+				@filter="setFilter"
+				@sort="setSort"
+			/>
 
 			<div id="animal-list" aria-live="polite">
 				<!-- TODO 1: The loading, error, and empty messages, and the animals, go here. -->
 				 <div v-if="loading">Loading...</div>
 				 <div v-else-if="error">{{ error }}</div>
-  				 <div v-else-if="animals.length === 0">No results found.</div>
+  				 <div class ="empty-message" v-else-if="animals.length === 0">There are no animals to show.</div>
 				 <div v-else>
-					<AnimalCard v-for="animal in animals" :key="animal.id" :animal="animal" @toggle="toggleAdoption(animal)" />
+					<AnimalCard v-for="animal in visibleAnimals" :key="animal.id" :animal="animal" @toggle="toggleAdoption(animal)"/>
 				</div>
 			</div>
 		</section>

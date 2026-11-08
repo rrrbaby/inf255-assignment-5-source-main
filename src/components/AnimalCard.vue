@@ -7,7 +7,7 @@ defineProps({
 // TODO 3: Declare the toggle event with defineEmits().
 // The data is owned by the parent (App.vue), 
 // so if the data is changed in this component it may have unintended side effects.
-const emits = defineEmits(["toggle"]);
+const emits = defineEmits(["toggle", "delete"]);
 
 function arrivalText(date) {
 	return dayjs(date).format("MMM D, YYYY") + " (" + dayjs().diff(date, "day") + " days in shelter)";
@@ -24,7 +24,6 @@ function arrivalText(date) {
    	 	<p>{{ animal.adopted ? "Adopted" : "Available" }}</p>
 		<div :class="animal.adopted ? 'adopted' : 'available'">
    	 	<button type="button" @click="emits('toggle')">Toggle</button>
-    	<button type="button" @click="emits('delete')">Delete</button>
 		</div>
 	</article>
 </template>
